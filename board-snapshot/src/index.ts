@@ -22,6 +22,8 @@ app.get('/screenshot', async (req: Request, res: Response) => {
   });
 
   const page = await browser.newPage();
+  page.on('console', msg => console.log('PAGE LOG:', msg.text()));
+
   // Navigate the page to a URL
   const url = process.env.SNAPSHOT_HOST
   await page.goto(`${req.query.uri}`, { waitUntil: 'networkidle0' });
