@@ -24,7 +24,7 @@ app.get('/screenshot', async (req: Request, res: Response) => {
   const page = await browser.newPage();
   // Navigate the page to a URL
   const url = process.env.SNAPSHOT_HOST
-  await page.goto(`${url}/lesson-board/${req.query.id}/preview`, { waitUntil: 'networkidle0' });
+  await page.goto(`${req.query.uri}`, { waitUntil: 'networkidle0' });
 
   // Set screen size
   await page.setViewport({width: 1080, height: 1024});
