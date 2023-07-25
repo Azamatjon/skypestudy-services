@@ -11,7 +11,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });
 
-app.post('/screenshot', async (req: Request, res: Response) => {
+app.get('/screenshot', async (req: Request, res: Response) => {
   const browser = await puppeteer.launch({
     headless: 'new',
     executablePath: process.env.EXECUTABLE_PATH,
@@ -24,7 +24,7 @@ app.post('/screenshot', async (req: Request, res: Response) => {
   const page = await browser.newPage();
   // Navigate the page to a URL
   const url = process.env.SNAPSHOT_HOST
-  await page.goto(`${url}/lesson-board/${req.body.id}/preview`, { waitUntil: 'networkidle0' });
+  await page.goto(`${url}/lesson-board/${req.query.id}/preview`, { waitUntil: 'networkidle0' });
 
   // Set screen size
   await page.setViewport({width: 1080, height: 1024});
