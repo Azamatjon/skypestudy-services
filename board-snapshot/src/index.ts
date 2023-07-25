@@ -29,7 +29,7 @@ app.get('/screenshot', async (req: Request, res: Response) => {
   await page.goto(`${req.query.uri}`, { waitUntil: 'networkidle0' });
 
   // Set screen size
-  await page.setViewport({width: 1080, height: 1024});
+  await page.setViewport({ width: 1080, height: 720 });
 
   // To reflect CSS used for screens instead of print
   await page.emulateMediaType('screen');
