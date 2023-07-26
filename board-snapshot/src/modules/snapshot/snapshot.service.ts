@@ -35,6 +35,9 @@ export class SnapshotService {
     // Set screen size
     const width = this.configService.get<number>('SNAPSHOT_WIDTH')
     const height = this.configService.get<number>('SNAPSHOT_HEIGHT')
+
+    console.log('width', width)
+    console.log('height', height)
     await page.setViewport({ width, height });
 
     // To reflect CSS used for screens instead of print
