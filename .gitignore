@@ -1,7 +1,5 @@
 # compiled output
 /dist
-/uploads/*
-!/uploads/.gitkeep
 /node_modules
 
 # Logs
@@ -12,7 +10,6 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
-schema.gql
 
 # OS
 .DS_Store
