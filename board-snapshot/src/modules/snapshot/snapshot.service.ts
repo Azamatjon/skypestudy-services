@@ -38,6 +38,7 @@ export class SnapshotService {
 
     console.log('width', width)
     console.log('height', height)
+    console.log('obj', { width, height })
     await page.setViewport({ width, height });
 
     // To reflect CSS used for screens instead of print
