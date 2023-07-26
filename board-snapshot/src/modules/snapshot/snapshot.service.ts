@@ -33,13 +33,13 @@ export class SnapshotService {
     await page.goto(`${this.configService.get<string>('SNAPSHOT_HOST')}/lesson-board/${lessonBoardId}/preview`, { waitUntil: 'networkidle0' });
 
     // Set screen size
-    const width = this.configService.get<number>('SNAPSHOT_WIDTH')
-    const height = this.configService.get<number>('SNAPSHOT_HEIGHT')
+    const width = this.configService.get<string>('SNAPSHOT_WIDTH')
+    const height = this.configService.get<string>('SNAPSHOT_HEIGHT')
 
     console.log('width', width)
     console.log('height', height)
     console.log('obj', { width, height })
-    await page.setViewport({ width, height });
+    await page.setViewport({ width: parseInt(width), height: parseInt(width) });
 
     // To reflect CSS used for screens instead of print
     await page.emulateMediaType('screen');
@@ -50,8 +50,8 @@ export class SnapshotService {
     await this.producerService.produce('lesson-board.snapshot.created', {
       headers: {
         lessonBoardId: lessonBoardId.toString(),
-        width: width.toString(),
-        height: height.toString()
+        width,
+        height
       },
       value: screenshot
     })
