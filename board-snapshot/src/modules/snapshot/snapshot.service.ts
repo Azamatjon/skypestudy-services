@@ -21,9 +21,10 @@ export class SnapshotService {
       headless: 'new',
       executablePath: process.env.EXECUTABLE_PATH,
       args: [
-        "--no-sandbox",
-        "--disable-gpu",
-      ]
+        '--no-sandbox',
+        '--disable-gpu',
+        '--disable-web-security'
+      ],
     });
 
     const page = await browser.newPage();
@@ -36,9 +37,6 @@ export class SnapshotService {
     const width = this.configService.get<string>('SNAPSHOT_WIDTH')
     const height = this.configService.get<string>('SNAPSHOT_HEIGHT')
 
-    console.log('width', width)
-    console.log('height', height)
-    console.log('obj', { width, height })
     await page.setViewport({ width: parseInt(width), height: parseInt(width) });
 
     // To reflect CSS used for screens instead of print
