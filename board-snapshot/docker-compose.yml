@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  board-snapshot-service:
+    container_name: board-snapshot-service
+    build:
+      context: .
+    restart: unless-stopped
+    environment:
+      - EXECUTABLE_PATH=/usr/bin/chromium
+      - SNAPSHOT_HOST=http://board-snapshot-frontend:8080
+      - SNAPSHOT_WIDTH=1024
+      - SNAPSHOT_HEIGHT=720
+      - KAFKA_BROKER_HOST=kafka
+      - KAFKA_BROKER_PORT=${KAFKA_BROKER_PORT}

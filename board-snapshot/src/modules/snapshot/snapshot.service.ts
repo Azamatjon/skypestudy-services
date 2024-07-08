@@ -30,6 +30,13 @@ export class SnapshotService {
     const page = await browser.newPage();
     page.on('console', msg => console.log('PAGE LOG:', msg.text()));
 
+    await page.setRequestInterception(true);
+
+    page.on('request', request => {
+      console.log('request', request.url())
+    })
+
+
     // Navigate the page to a URL
     await page.goto(`${this.configService.get<string>('SNAPSHOT_HOST')}/lesson-board/${lessonBoardId}/preview`, { waitUntil: 'networkidle0' });
 
