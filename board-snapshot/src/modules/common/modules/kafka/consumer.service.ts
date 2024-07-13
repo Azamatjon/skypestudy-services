@@ -18,6 +18,7 @@ export class ConsumerService implements OnApplicationShutdown {
 
   async consume({ topics, config, onMessage }: KafkaConsumerOptions) {
     const consumer = new KafkaConsumer(
+      this.configService.get<string>('KAFKA_CLIENT_ID'),
       topics,
       config,
       `${this.configService.get<string>(

@@ -14,11 +14,15 @@ export class KafkaConsumer implements IConsumer {
   private readonly logger: Logger;
 
   constructor(
+    private readonly clientId: string,
     private readonly topics: ConsumerSubscribeTopics,
     config: ConsumerConfig,
     broker: string,
   ) {
-    this.kafka = new Kafka({ brokers: [broker] });
+    this.kafka = new Kafka({
+      clientId: this.clientId,
+      brokers: [broker],
+    });
     this.consumer = this.kafka.consumer(config);
     this.logger = new Logger(`${topics.topics}-${config.groupId}`);
   }
