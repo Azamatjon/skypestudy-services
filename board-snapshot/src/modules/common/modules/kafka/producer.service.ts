@@ -25,6 +25,7 @@ export class ProducerService implements OnApplicationShutdown {
     let producer = this.producers.get(topic);
     if (!producer) {
       producer = new KafkaProducer(
+        this.configService.get<string>('KAFKA_PRODUCER_CLIENT_ID'),
         topic,
         `${this.configService.get<string>(
           'KAFKA_BROKER_HOST',

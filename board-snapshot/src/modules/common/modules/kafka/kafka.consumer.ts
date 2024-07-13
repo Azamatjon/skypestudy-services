@@ -20,7 +20,7 @@ export class KafkaConsumer implements IConsumer {
     broker: string,
   ) {
     this.kafka = new Kafka({
-      clientId: this.clientId,
+      clientId,
       brokers: [broker],
     });
     this.consumer = this.kafka.consumer(config);

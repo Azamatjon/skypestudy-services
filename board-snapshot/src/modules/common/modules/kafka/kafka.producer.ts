@@ -7,8 +7,13 @@ export class KafkaProducer implements IProducer {
   private readonly producer: Producer;
   private readonly logger: Logger;
 
-  constructor(private readonly topic: string, broker: string) {
+  constructor(
+    private readonly clientId: string,
+    private readonly topic: string,
+    broker: string,
+  ) {
     this.kafka = new Kafka({
+      clientId,
       brokers: [broker],
     });
     this.producer = this.kafka.producer({
