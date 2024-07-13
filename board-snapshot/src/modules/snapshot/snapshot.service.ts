@@ -1,54 +1,54 @@
-import {Injectable, Logger} from '@nestjs/common';
-import {ProducerService} from "../common/modules/kafka/producer.service";
-import * as puppeteer from "puppeteer";
-import {ConfigService} from "@nestjs/config";
+import { Injectable, Logger } from '@nestjs/common';
+import { ProducerService } from '../common/modules/kafka/producer.service';
+import * as puppeteer from 'puppeteer';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class SnapshotService {
-  private readonly logger: Logger
+  private readonly logger: Logger;
 
   constructor(
-      private readonly producerService: ProducerService,
-      private readonly configService: ConfigService,
+    private readonly producerService: ProducerService,
+    private readonly configService: ConfigService,
   ) {
     this.logger = new Logger('SnapshotService');
   }
 
   async takeSnapshot(lessonBoardId: number) {
-    this.logger.log('takeSnapshot', lessonBoardId)
+    this.logger.log('takeSnapshot', lessonBoardId);
 
     const browser = await puppeteer.launch({
       headless: 'new',
       executablePath: process.env.EXECUTABLE_PATH,
-      args: [
-        '--no-sandbox',
-        '--disable-gpu',
-        '--disable-web-security'
-      ],
+      args: ['--no-sandbox', '--disable-gpu', '--disable-web-security'],
     });
 
     const page = await browser.newPage();
-    page.on('console', msg => console.log('PAGE LOG:', msg.text()));
+    page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
 
     await page.setRequestInterception(true);
 
-    page.on('request', request => {
-      console.log('request', request.url())
-    })
-
+    page.on('request', (request) => {
+      console.log('request', request.url());
+    });
 
     // Navigate the page to a URL
-    await page.goto(`${this.configService.get<string>('SNAPSHOT_HOST')}/lesson-board/${lessonBoardId}/preview`, { waitUntil: 'networkidle0' });
+    await page.goto(
+      `${this.configService.get<string>(
+        'SNAPSHOT_HOST',
+      )}/lesson-board/${lessonBoardId}/preview`,
+      { waitUntil: 'networkidle0' },
+    );
 
     // Set screen size
-    const width = this.configService.get<string>('SNAPSHOT_WIDTH')
-    const height = this.configService.get<string>('SNAPSHOT_HEIGHT')
+    const width = this.configService.get<string>('SNAPSHOT_WIDTH');
+    const height = this.configService.get<string>('SNAPSHOT_HEIGHT');
 
     await page.setViewport({ width: parseInt(width), height: parseInt(width) });
 
     // To reflect CSS used for screens instead of print
     await page.emulateMediaType('screen');
-    const screenshot = await page.screenshot({ type: 'jpeg' })
+    const screenshot = await page.screenshot({ type: 'jpeg' });
 
     await browser.close();
 
@@ -56,9 +56,9 @@ export class SnapshotService {
       headers: {
         lessonBoardId: lessonBoardId.toString(),
         width,
-        height
+        height,
       },
-      value: screenshot
-    })
+      value: screenshot,
+    });
   }
 }

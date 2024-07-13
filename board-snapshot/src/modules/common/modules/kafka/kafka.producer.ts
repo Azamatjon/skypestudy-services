@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import {Kafka, Message, Partitioners, Producer} from 'kafkajs';
+import { Kafka, Message, Partitioners, Producer } from 'kafkajs';
 import { IProducer } from './producer.interface';
 
 export class KafkaProducer implements IProducer {
@@ -9,9 +9,11 @@ export class KafkaProducer implements IProducer {
 
   constructor(private readonly topic: string, broker: string) {
     this.kafka = new Kafka({
-      brokers: [broker]
+      brokers: [broker],
     });
-    this.producer = this.kafka.producer({ createPartitioner: Partitioners.LegacyPartitioner });
+    this.producer = this.kafka.producer({
+      createPartitioner: Partitioners.LegacyPartitioner,
+    });
     this.logger = new Logger(topic);
   }
 

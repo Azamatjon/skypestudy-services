@@ -15,22 +15,24 @@ export class ProducerService implements OnApplicationShutdown {
     await producer.produce(message);
   }
 
+  async onApplicationShutdown() {
+    for (const producer of this.producers.values()) {
+      await producer.disconnect();
+    }
+  }
+
   private async getProducer(topic: string) {
     let producer = this.producers.get(topic);
     if (!producer) {
       producer = new KafkaProducer(
         topic,
-        `${this.configService.get<string>('KAFKA_BROKER_HOST')}:${this.configService.get<string>('KAFKA_BROKER_PORT')}`
+        `${this.configService.get<string>(
+          'KAFKA_BROKER_HOST',
+        )}:${this.configService.get<string>('KAFKA_BROKER_PORT')}`,
       );
       await producer.connect();
       this.producers.set(topic, producer);
     }
     return producer;
-  }
-
-  async onApplicationShutdown() {
-    for (const producer of this.producers.values()) {
-      await producer.disconnect();
-    }
   }
 }

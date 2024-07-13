@@ -1,5 +1,11 @@
 import { Logger } from '@nestjs/common';
-import { Consumer, ConsumerConfig, ConsumerSubscribeTopics, Kafka, KafkaMessage } from 'kafkajs';
+import {
+  Consumer,
+  ConsumerConfig,
+  ConsumerSubscribeTopics,
+  Kafka,
+  KafkaMessage,
+} from 'kafkajs';
 import { IConsumer } from './consumer.interface';
 
 export class KafkaConsumer implements IConsumer {
@@ -7,7 +13,11 @@ export class KafkaConsumer implements IConsumer {
   private readonly consumer: Consumer;
   private readonly logger: Logger;
 
-  constructor(private readonly topics: ConsumerSubscribeTopics, config: ConsumerConfig, broker: string) {
+  constructor(
+    private readonly topics: ConsumerSubscribeTopics,
+    config: ConsumerConfig,
+    broker: string,
+  ) {
     this.kafka = new Kafka({ brokers: [broker] });
     this.consumer = this.kafka.consumer(config);
     this.logger = new Logger(`${topics.topics}-${config.groupId}`);
@@ -19,20 +29,16 @@ export class KafkaConsumer implements IConsumer {
       eachMessage: async ({ message, partition }) => {
         this.logger.debug(`Processing message partition: ${partition}`);
         try {
-          await onMessage(message)
+          await onMessage(message);
         } catch (err) {
-          this.logger.error('Error consuming message. Adding to dead letter queue...', err);
+          this.logger.error(
+            'Error consuming message. Adding to dead letter queue...',
+            err,
+          );
           await this.addMessageToDlq(message);
         }
-      }
+      },
     });
-  }
-
-  private async addMessageToDlq(message: KafkaMessage) {
-    // await this.databaseService
-    //   .getDbHandle()
-    //   .collection('dlq')
-    //   .insertOne({ value: message.value, topic: this.topic.topic });
   }
 
   async connect() {
@@ -48,5 +54,12 @@ export class KafkaConsumer implements IConsumer {
 
   async disconnect() {
     await this.consumer.disconnect();
+  }
+
+  private async addMessageToDlq(message: KafkaMessage) {
+    // await this.databaseService
+    //   .getDbHandle()
+    //   .collection('dlq')
+    //   .insertOne({ value: message.value, topic: this.topic.topic });
   }
 }
