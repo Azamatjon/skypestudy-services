@@ -28,9 +28,9 @@ export class SnapshotService {
 
     await page.setRequestInterception(true);
 
-    page.on('request', (request) => {
-      console.log('request', request.url());
-    });
+    // page.on('request', (request) => {
+    //   console.log('request', request.url());
+    // });
 
     this.logger.log('going to', `${this.configService.get<string>(
         'SNAPSHOT_HOST',
