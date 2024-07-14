@@ -25,38 +25,14 @@ export class SnapshotService {
 
     const page = await browser.newPage();
     page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
-    page.on('pageerror', (error) => console.log('Page error:', error));
-
-    // await page.setRequestInterception(true);
-
-    page.on('request', (request) => {
-      console.log('request', request.url());
-    });
-
-    // const uri = `${this.configService.get<string>(
-    //     'SNAPSHOT_HOST',
-    // )}/lesson-board/${lessonBoardId}/preview`
-
-    // require('http').get(uri, (res) => {
-    //   console.log(`Response Status: ${res.statusCode}`);
-    //   res.on('data', (chunk) => {
-    //     console.log(`Response Data: ${chunk}`);
-    //   });
-    // }).on('error', (err) => {
-    //   console.error(`Error pinging ${uri}:`, err.message);
-    // });
-
-    // const uri = 'https://google.com'
-    const uri = 'http://board-snapshot-backend:8080/ping'
-    this.logger.log('going to', uri);
 
     // Navigate the page to a URL
     await page.goto(
-        uri,
+      `${this.configService.get<string>(
+        'SNAPSHOT_HOST',
+      )}/lesson-board/${lessonBoardId}/preview`,
       { waitUntil: 'networkidle0' },
     );
-
-    this.logger.log('ready')
 
     // Set screen size
     const width = this.configService.get<string>('SNAPSHOT_WIDTH');
@@ -70,9 +46,6 @@ export class SnapshotService {
 
     await browser.close();
 
-
-    this.logger.log('browser close')
-
     await this.producerService.produce('lesson-board.snapshot.created', {
       headers: {
         lessonBoardId: lessonBoardId.toString(),
@@ -82,6 +55,6 @@ export class SnapshotService {
       value: screenshot,
     });
 
-    this.logger.log('producerService produced')
+    this.logger.log('producerService produced');
   }
 }
