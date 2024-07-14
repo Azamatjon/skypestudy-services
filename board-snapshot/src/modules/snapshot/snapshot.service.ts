@@ -27,7 +27,7 @@ export class SnapshotService {
     page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
     page.on('pageerror', (error) => console.log('Page error:', error));
 
-    await page.setRequestInterception(true);
+    // await page.setRequestInterception(true);
 
     // page.on('request', (request) => {
     //   console.log('request', request.url());
