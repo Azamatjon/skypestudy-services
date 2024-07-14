@@ -32,15 +32,15 @@ export class SnapshotService {
     //   console.log('request', request.url());
     // });
 
-    this.logger.log('going to', `${this.configService.get<string>(
-        'SNAPSHOT_HOST',
-    )}/lesson-board/${lessonBoardId}/preview`);
+    // const uri = `${this.configService.get<string>(
+    //     'SNAPSHOT_HOST',
+    // )}/lesson-board/${lessonBoardId}/preview`
+    const uri = 'https://google.com'
+    this.logger.log('going to', uri);
 
     // Navigate the page to a URL
     await page.goto(
-      `${this.configService.get<string>(
-        'SNAPSHOT_HOST',
-      )}/lesson-board/${lessonBoardId}/preview`,
+        uri,
       { waitUntil: 'networkidle0' },
     );
 
