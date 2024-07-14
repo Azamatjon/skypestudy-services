@@ -16,7 +16,12 @@ export class SnapshotModule implements OnModuleInit {
   async onModuleInit() {
     await this.consumerService.consume({
       topics: { topics: ['lesson-board.snapshot.create'] },
-      config: { groupId: 'snapshot-creator-consumer' },
+      config: {
+        groupId: 'snapshot-creator-consumer',
+        sessionTimeout: 60000, // Adjust session timeout
+        heartbeatInterval: 3000, // Frequent heartbeats
+        allowAutoTopicCreation: true,
+      },
       onMessage: async (message) => {
         await this.snapshotService.takeSnapshot(
           parseInt(message.value.toString()),
