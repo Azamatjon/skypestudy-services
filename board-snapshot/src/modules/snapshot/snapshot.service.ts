@@ -47,7 +47,7 @@ export class SnapshotService {
     // });
 
     // const uri = 'https://google.com'
-    const uri = 'http://board-snapshot-backend:8082/ping'
+    const uri = 'http://board-snapshot-backend:8080/ping'
     this.logger.log('going to', uri);
 
     // Navigate the page to a URL
