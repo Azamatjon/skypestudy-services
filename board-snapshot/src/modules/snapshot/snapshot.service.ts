@@ -32,6 +32,10 @@ export class SnapshotService {
       console.log('request', request.url());
     });
 
+    this.logger.log('going to', `${this.configService.get<string>(
+        'SNAPSHOT_HOST',
+    )}/lesson-board/${lessonBoardId}/preview`);
+
     // Navigate the page to a URL
     await page.goto(
       `${this.configService.get<string>(
@@ -39,6 +43,8 @@ export class SnapshotService {
       )}/lesson-board/${lessonBoardId}/preview`,
       { waitUntil: 'networkidle0' },
     );
+
+    this.logger.log('ready')
 
     // Set screen size
     const width = this.configService.get<string>('SNAPSHOT_WIDTH');
@@ -52,6 +58,9 @@ export class SnapshotService {
 
     await browser.close();
 
+
+    this.logger.log('browser close')
+
     await this.producerService.produce('lesson-board.snapshot.created', {
       headers: {
         lessonBoardId: lessonBoardId.toString(),
@@ -60,5 +69,7 @@ export class SnapshotService {
       },
       value: screenshot,
     });
+
+    this.logger.log('producerService produced')
   }
 }
