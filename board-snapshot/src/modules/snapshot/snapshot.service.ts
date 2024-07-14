@@ -25,6 +25,7 @@ export class SnapshotService {
 
     const page = await browser.newPage();
     page.on('console', (msg) => console.log('PAGE LOG:', msg.text()));
+    page.on('pageerror', (error) => console.log('Page error:', error));
 
     await page.setRequestInterception(true);
 
@@ -41,7 +42,7 @@ export class SnapshotService {
     // Navigate the page to a URL
     await page.goto(
         uri,
-      { waitUntil: 'networkidle0' },
+      { waitUntil: 'load' },
     );
 
     this.logger.log('ready')
