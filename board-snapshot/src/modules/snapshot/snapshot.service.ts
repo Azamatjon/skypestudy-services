@@ -29,20 +29,20 @@ export class SnapshotService {
 
     // await page.setRequestInterception(true);
 
-    // page.on('request', (request) => {
-    //   console.log('request', request.url());
-    // });
+    page.on('request', (request) => {
+      console.log('request', request.url());
+    });
 
-    const uri = `${this.configService.get<string>(
-        'SNAPSHOT_HOST',
-    )}/lesson-board/${lessonBoardId}/preview`
-    // const uri = 'https://google.com'
+    // const uri = `${this.configService.get<string>(
+    //     'SNAPSHOT_HOST',
+    // )}/lesson-board/${lessonBoardId}/preview`
+    const uri = 'https://google.com'
     this.logger.log('going to', uri);
 
     // Navigate the page to a URL
     await page.goto(
         uri,
-      { waitUntil: 'load' },
+      { waitUntil: 'networkidle0' },
     );
 
     this.logger.log('ready')
