@@ -33,10 +33,20 @@ export class SnapshotService {
       console.log('request', request.url());
     });
 
-    // const uri = `${this.configService.get<string>(
-    //     'SNAPSHOT_HOST',
-    // )}/lesson-board/${lessonBoardId}/preview`
-    const uri = 'https://google.com'
+    const uri = `${this.configService.get<string>(
+        'SNAPSHOT_HOST',
+    )}/lesson-board/${lessonBoardId}/preview`
+
+    require('http').get(uri, (res) => {
+      console.log(`Response Status: ${res.statusCode}`);
+      res.on('data', (chunk) => {
+        console.log(`Response Data: ${chunk}`);
+      });
+    }).on('error', (err) => {
+      console.error(`Error pinging ${uri}:`, err.message);
+    });
+
+    // const uri = 'https://google.com'
     this.logger.log('going to', uri);
 
     // Navigate the page to a URL
